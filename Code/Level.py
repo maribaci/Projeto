@@ -6,8 +6,7 @@ from pygame import Rect
 from pygame.font import Font
 
 from Code.Const import TIMEOUT_LEVEL, EVENT_ENEMY, SPAWN_TIME, EVENT_TIMEOUT, TIMEOUT_STEP, C_WHITE, \
-    WIN_HEIGHT, C_GREEN, C_CYAN, MENU_OPTION
-from Code.Enemy import Enemy
+    WIN_HEIGHT, C_GREEN, C_BLUE
 from Code.Entity import Entity
 from Code.EntityFactory import EntityFactory
 from Code.EntityMediator import EntityMediator
@@ -40,10 +39,6 @@ class Level:
             for ent in self.entity_list:
                 self.window.blit(source=ent.surf, dest=ent.rect)
                 ent.move()
-                if isinstance(ent, (Player, Enemy)):
-                    shoot = ent.shoot()
-                    if shoot is not None:
-                        self.entity_list.append(shoot)
                 if ent.name == 'Player1':
                     self.level_text(14, f'Score: {ent.score}', C_GREEN, (10, 25))
             for event in pygame.event.get():
@@ -71,7 +66,7 @@ class Level:
 
 
             self.level_text(14, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', C_WHITE, (10, 5))
-            self.level_text(14, f'entidades: {len(self.entity_list)}', C_WHITE, (10, WIN_HEIGHT - 20))
+            self.level_text(14, f'Enemy: {len(self.entity_list)}', C_BLUE, (10, WIN_HEIGHT - 20))
             pygame.display.flip()
 
             EntityMediator.verify_collision(entity_list=self.entity_list)

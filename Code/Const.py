@@ -112,7 +112,7 @@ WIN_WIDTH = 576
 WIN_HEIGHT = 324
 
 # S
-SCORE_POS = {'Title': (WIN_WIDTH / 2, 50),
+SCORE_POS = {'Title': (WIN_WIDTH / 2, 40),
              'EnterName': (WIN_WIDTH / 2, 80),
              'Label': (WIN_WIDTH / 2, 90),
              'Name': (WIN_WIDTH / 2, 110),
