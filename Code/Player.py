@@ -1,14 +1,13 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 import pygame.key
 
-from Code.Const import ENTITY_SHOT_DELAY, PLAYER_KEY_UP, ENTITY_SPEED, PLAYER_KEY_DOWN, PLAYER_KEY_LEFT, \
-    PLAYER_KEY_RIGHT, WIN_HEIGHT, WIN_WIDTH, PLAYER_KEY_SHOOT
+from Code.Const import PLAYER_KEY_UP, ENTITY_SPEED, PLAYER_KEY_DOWN, PLAYER_KEY_LEFT, \
+    PLAYER_KEY_RIGHT, WIN_HEIGHT, WIN_WIDTH
 from Code.Entity import Entity
 
 class Player(Entity):
     def __init__(self, name: str, position: tuple):
         super().__init__(name, position)
+        self.damage = None
 
     def move(self):
         pressed_key = pygame.key.get_pressed()
