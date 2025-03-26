@@ -1,44 +1,68 @@
+import sys
+import pygame
+
+from Code.Const import WIN_HEIGHT, C_RED, WIN_WIDTH
 from Code.Enemy import Enemy
 from Code.Entity import Entity
 from Code.Player import Player
 
+
 class EntityMediator:
-    @staticmethod
-    def __verify_collision_window(ent: Entity):
-        if isinstance(ent, Enemy) and ent.rect.right <= 0:
-            ent.health = 0
-
-    @staticmethod
-    def __verify_collision_entity(ent1: Entity, ent2: Entity):
-        if isinstance(ent1, Player) and isinstance(ent2, Enemy):
-            if ent1.rect.colliderect(ent2.rect):
-                #ent1.health -= ent2.damage
-                #ent2.health -= ent1.damage
-                EntityMediator.end_game()
-
-    @staticmethod
-    def __give_score(enemy: Enemy, entity_list: list[Entity]):
-        if enemy.last_dmg == 'Player':
-            for ent in entity_list:
-                if isinstance(ent, Player) and ent.name == 'Player1':
-                    ent.score += enemy.score
 
     @staticmethod
     def verify_collision(entity_list: list[Entity]):
-        for i, entity1 in enumerate(entity_list):
-            EntityMediator.__verify_collision_window(entity1)
-            if entity1.name == "Player1":
-                for entity2 in entity_list[i + 1:]:
-                    EntityMediator.__verify_collision_entity(entity1, entity2)
+        for entity in entity_list:
+            EntityMediator.__handle_window_collision(entity)
+
+        players = [e for e in entity_list if isinstance(e, Player)]
+        enemies = [e for e in entity_list if isinstance(e, Enemy)]
+
+        for player in players:
+            for enemy in enemies:
+                if player.rect.colliderect(enemy.rect):
+                    EntityMediator.show_game_over()
+
+    @staticmethod
+    def __handle_window_collision(entity: Entity):
+        if isinstance(entity, Enemy) and entity.rect.right <= 0:
+            entity.health = 0
 
     @staticmethod
     def verify_health(entity_list: list[Entity]):
-        to_remove = [ent for ent in entity_list if ent.health <= 0]
-        for ent in to_remove:
-            if isinstance(ent, Enemy):
-                EntityMediator.__give_score(ent, entity_list)
-            entity_list.remove(ent)
+        to_remove = [entity for entity in entity_list if entity.health <= 0]
+        for entity in to_remove:
+            if isinstance(entity, Enemy):
+                EntityMediator.__add_score_to_player(entity, entity_list)
+            entity_list.remove(entity)
 
     @staticmethod
-    def end_game():
-        print("Game Over!")
+    def __add_score_to_player(enemy: Enemy, entity_list: list[Entity]):
+        if enemy.last_dmg == 'Player':
+            for entity in entity_list:
+                if isinstance(entity, Player) and entity.name == 'Player1':
+                    entity.score += enemy.score
+
+    @staticmethod
+    def show_game_over():
+        pygame.mixer_music.load('./asset/over.mp3')
+        pygame.mixer_music.play(-1)
+        screen = pygame.display.get_surface()
+        if screen:
+            screen.fill((0, 0, 0))
+            EntityMediator.__draw_text(screen, 80, "Game Over", C_RED, ((WIN_WIDTH //2), 100))
+            pygame.display.flip()
+            pygame.time.delay(2000)
+
+        EntityMediator.quit_game()
+
+    @staticmethod
+    def __draw_text(surface, size: int, text: str, color: tuple, position: tuple):
+        font = pygame.font.SysFont("Comic Sans MS", size)
+        text_surface = font.render(text, True, color).convert_alpha()
+        text_rect = text_surface.get_rect(center=position)
+        surface.blit(text_surface, text_rect)
+
+    @staticmethod
+    def quit_game():
+        pygame.quit()
+        sys.exit()

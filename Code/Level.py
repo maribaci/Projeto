@@ -27,7 +27,7 @@ class Level:
         player.score = player_score[0]
         self.entity_list.append(player)
         pygame.time.set_timer(EVENT_ENEMY, SPAWN_TIME)
-        pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)  # 100ms
+        pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)
 
     def run(self, player_score: list[int]):
         pygame.mixer_music.load(f'./asset/Level.mp3')

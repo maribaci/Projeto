@@ -16,7 +16,6 @@ class Menu:
         pygame.mixer_music.load('./asset/Menu.mp3')
         pygame.mixer_music.play(-1)
         while True:
-            # Menu
             self.window.blit(source=self.surf, dest=self.rect)
             self.menu_text(50, "Paper Plane Travel", C_YELLOW, ((WIN_WIDTH / 2), 70))
 
