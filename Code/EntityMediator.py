@@ -1,11 +1,11 @@
 import sys
+
 import pygame
 
-from Code.Const import WIN_HEIGHT, C_RED, WIN_WIDTH
+from Code.Const import C_RED, WIN_WIDTH
 from Code.Enemy import Enemy
 from Code.Entity import Entity
 from Code.Player import Player
-
 
 class EntityMediator:
 
@@ -18,29 +18,22 @@ class EntityMediator:
         enemies = [e for e in entity_list if isinstance(e, Enemy)]
 
         for player in players:
+            collided = False
             for enemy in enemies:
                 if player.rect.colliderect(enemy.rect):
                     EntityMediator.show_game_over()
+                    return
+                else:
+                    collided = True
+
+            if collided:
+                player.score += 1
 
     @staticmethod
     def __handle_window_collision(entity: Entity):
         if isinstance(entity, Enemy) and entity.rect.right <= 0:
-            entity.health = 0
+            entity.score = 0
 
-    @staticmethod
-    def verify_health(entity_list: list[Entity]):
-        to_remove = [entity for entity in entity_list if entity.health <= 0]
-        for entity in to_remove:
-            if isinstance(entity, Enemy):
-                EntityMediator.__add_score_to_player(entity, entity_list)
-            entity_list.remove(entity)
-
-    @staticmethod
-    def __add_score_to_player(enemy: Enemy, entity_list: list[Entity]):
-        if enemy.last_dmg == 'Player':
-            for entity in entity_list:
-                if isinstance(entity, Player) and entity.name == 'Player1':
-                    entity.score += enemy.score
 
     @staticmethod
     def show_game_over():
@@ -51,7 +44,7 @@ class EntityMediator:
             screen.fill((0, 0, 0))
             EntityMediator.__draw_text(screen, 80, "Game Over", C_RED, ((WIN_WIDTH //2), 100))
             pygame.display.flip()
-            pygame.time.delay(2000)
+            pygame.time.delay(5000)
 
         EntityMediator.quit_game()
 
@@ -66,3 +59,7 @@ class EntityMediator:
     def quit_game():
         pygame.quit()
         sys.exit()
+
+
+
+

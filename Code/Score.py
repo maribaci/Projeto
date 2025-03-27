@@ -5,7 +5,7 @@ import pygame
 from pygame import Surface, Rect, KEYDOWN, K_RETURN, K_BACKSPACE, K_ESCAPE
 from pygame.font import Font
 
-from Code.Const import C_YELLOW, SCORE_POS, C_CYAN
+from Code.Const import C_YELLOW, SCORE_POS, C_CYAN, MENU_OPTION, C_WHITE
 from Code.DBProxy import DBProxy
 
 
@@ -24,8 +24,13 @@ class Score:
         while True:
             self.window.blit(source=self.surf, dest=self.rect)
             self.score_text(60, 'YOU WIN!!', C_YELLOW, SCORE_POS['Title'])
-            text = 'Write your name (4 characters):'
+            text = 'Enter your name (4 characters):'
             score = player_score[0]
+            if game_mode == MENU_OPTION[0]:
+                score = player_score[0]
+            else:
+                score = player_score[1]
+            self.score_text(20, text, C_WHITE, SCORE_POS['EnterName'])
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
