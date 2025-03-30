@@ -2,12 +2,13 @@ import sys
 
 import pygame
 
-from Code.Const import C_RED, WIN_WIDTH
+from Code.Const import C_RED, WIN_WIDTH, C_YELLOW
 from Code.Enemy import Enemy
 from Code.Entity import Entity
 from Code.Player import Player
 
 class EntityMediator:
+    game_over_bg = pygame.image.load("./asset/GameOver.png")
 
     @staticmethod
     def verify_collision(entity_list: list[Entity]):
@@ -42,24 +43,14 @@ class EntityMediator:
         screen = pygame.display.get_surface()
         if screen:
             screen.fill((0, 0, 0))
-            EntityMediator.__draw_text(screen, 80, "Game Over", C_RED, ((WIN_WIDTH //2), 100))
+            bg_resized = pygame.transform.scale(EntityMediator.game_over_bg, screen.get_size())
+            screen.blit(bg_resized, (0, 0))
             pygame.display.flip()
             pygame.time.delay(5000)
 
-        EntityMediator.quit_game()
+        EntityMediator.return_to_main()
 
     @staticmethod
-    def __draw_text(surface, size: int, text: str, color: tuple, position: tuple):
-        font = pygame.font.SysFont("Comic Sans MS", size)
-        text_surface = font.render(text, True, color).convert_alpha()
-        text_rect = text_surface.get_rect(center=position)
-        surface.blit(text_surface, text_rect)
-
-    @staticmethod
-    def quit_game():
-        pygame.quit()
-        sys.exit()
-
-
-
-
+    def return_to_main():
+        import main
+        main.run_game()
