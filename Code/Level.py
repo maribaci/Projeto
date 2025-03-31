@@ -55,13 +55,14 @@ class Level:
                         for ent in self.entity_list:
                             if isinstance(ent, Player) and ent.name == 'Player1':
                                 player_score[0] = ent.score
-                                return
+                                return True
 
             self.level_text(14, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', C_WHITE, (10, 5))
-            self.level_text(14, f'Enemy: {len(self.entity_list)}', C_BLUE, (10, WIN_HEIGHT - 20))
             pygame.display.flip()
 
-            EntityMediator.verify_collision(entity_list=self.entity_list)
+            hascollided = EntityMediator.verify_collision(entity_list=self.entity_list)
+            if hascollided:
+                return False
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)

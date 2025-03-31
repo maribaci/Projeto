@@ -26,13 +26,14 @@ class EntityMediator:
 
             if collided:
                 EntityMediator.show_game_over()
-                return
+                return True
 
             if EntityMediator.enemy_spawned:
                 current_time = pygame.time.get_ticks()
                 if current_time - EntityMediator.last_score_update >= EntityMediator.score_interval:
                     player.score += 10
                     EntityMediator.last_score_update = current_time
+        return False
 
     @staticmethod
     def __handle_window_collision(entity: Entity):
@@ -63,5 +64,6 @@ class EntityMediator:
 
     @staticmethod
     def return_to_main():
-        from main import run_game
-        run_game()
+        return
+    #    from main import run_game
+    #    run_game()
