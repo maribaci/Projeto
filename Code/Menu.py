@@ -26,7 +26,6 @@ class Menu:
                     self.menu_text(20, MENU_OPTION[i], C_BLUE, ((WIN_WIDTH / 2), 150 + 25 * i))
             pygame.display.flip()
 
-            # Keyboard
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
