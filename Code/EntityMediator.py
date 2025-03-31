@@ -17,22 +17,21 @@ class EntityMediator:
         for entity in entity_list:
             EntityMediator.__handle_window_collision(entity)
 
-        players = [e for e in entity_list if isinstance(e, Player)]
+        player = next((e for e in entity_list if isinstance(e, Player)), None)
         enemies = [e for e in entity_list if isinstance(e, Enemy)]
 
-        for player in players:
-            collided = any(
-                enemy.name in ("Enemy1", "Enemy2") and player.rect.colliderect(enemy.rect) for enemy in enemies)
+        collided = any(
+            enemy.name in ("Enemy1", "Enemy2") and player.rect.colliderect(enemy.rect) for enemy in enemies)
 
-            if collided:
-                EntityMediator.show_game_over()
-                return True
+        if collided:
+            EntityMediator.show_game_over()
+            return True
 
-            if EntityMediator.enemy_spawned:
-                current_time = pygame.time.get_ticks()
-                if current_time - EntityMediator.last_score_update >= EntityMediator.score_interval:
-                    player.score += 10
-                    EntityMediator.last_score_update = current_time
+        if EntityMediator.enemy_spawned:
+            current_time = pygame.time.get_ticks()
+            if current_time - EntityMediator.last_score_update >= EntityMediator.score_interval:
+                player.score += 10
+                EntityMediator.last_score_update = current_time
         return False
 
     @staticmethod
@@ -60,10 +59,4 @@ class EntityMediator:
             pygame.display.flip()
             pygame.time.delay(3000)
 
-        EntityMediator.return_to_main()
-
-    @staticmethod
-    def return_to_main():
         return
-    #    from main import run_game
-    #    run_game()
