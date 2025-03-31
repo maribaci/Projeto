@@ -1,8 +1,5 @@
-import sys
-
 import pygame
 
-from Code.Const import C_RED, WIN_WIDTH, C_YELLOW
 from Code.Enemy import Enemy
 from Code.Entity import Entity
 from Code.Player import Player
@@ -42,9 +39,15 @@ class EntityMediator:
         pygame.mixer_music.play(-1)
         screen = pygame.display.get_surface()
         if screen:
+            bg_width, bg_height = EntityMediator.game_over_bg.get_size()
+            screen_width, screen_height = screen.get_size()
+
+            bg_x = (screen_width - bg_width) // 2
+            bg_y = (screen_height - bg_height) // 2
+
             screen.fill((0, 0, 0))
-            bg_resized = pygame.transform.scale(EntityMediator.game_over_bg, screen.get_size())
-            screen.blit(bg_resized, (0, 0))
+            screen.blit(EntityMediator.game_over_bg, (bg_x, bg_y))
+
             pygame.display.flip()
             pygame.time.delay(5000)
 

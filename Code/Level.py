@@ -50,9 +50,9 @@ class Level:
                     self.entity_list.append(EntityFactory.get_entity(choice))
                 if event.type == EVENT_TIMEOUT:
                     self.timeout -= TIMEOUT_STEP
-                    if self.timeout == 0:
+                    if self.timeout <= 0:
                         for ent in self.entity_list:
-                            if isinstance(ent, Player) and ent.name == 'Player':
+                            if isinstance(ent, Player) and ent.name == 'Player1':
                                 player_score[0] = ent.score
                             return True
 
