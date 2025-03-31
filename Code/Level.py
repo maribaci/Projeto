@@ -1,12 +1,10 @@
 import random
 import sys
-
 import pygame
+
 from pygame import Rect
 from pygame.font import Font
-
-from Code.Const import TIMEOUT_LEVEL, EVENT_ENEMY, SPAWN_TIME, EVENT_TIMEOUT, TIMEOUT_STEP, C_WHITE, \
-    WIN_HEIGHT, C_GREEN, C_BLUE
+from Code.Const import TIMEOUT_LEVEL, EVENT_ENEMY, SPAWN_TIME, EVENT_TIMEOUT, TIMEOUT_STEP, C_WHITE, C_GREEN
 from Code.Entity import Entity
 from Code.EntityFactory import EntityFactory
 from Code.EntityMediator import EntityMediator
@@ -16,7 +14,7 @@ class Surface:
     pass
 
 class Level:
-    def __init__(self, window: Surface, name: str, game_mode: str, player_score: list[int]):
+    def __init__(self, window: Surface, name: str, game_mode: str, player_score: int):
         self.timeout = TIMEOUT_LEVEL
         self.window = window
         self.name = name
@@ -24,7 +22,7 @@ class Level:
         self.entity_list: list[Entity] = []
         self.entity_list.extend(EntityFactory.get_entity(self.name + 'Bg'))
         player = EntityFactory.get_entity('Player1')
-        player.score = player_score[0]
+        player.score = player_score
         self.entity_list.append(player)
         pygame.time.set_timer(EVENT_ENEMY, SPAWN_TIME)
         pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)
@@ -60,8 +58,8 @@ class Level:
             self.level_text(14, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', C_WHITE, (10, 5))
             pygame.display.flip()
 
-            hascollided = EntityMediator.verify_collision(entity_list=self.entity_list)
-            if hascollided:
+            collided = EntityMediator.verify_collision(entity_list=self.entity_list)
+            if collided:
                 return False
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):

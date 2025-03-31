@@ -3,7 +3,7 @@ from datetime import datetime
 import pygame
 from pygame import Surface, Rect, KEYDOWN, K_RETURN, K_BACKSPACE, K_ESCAPE
 from pygame.font import Font
-from Code.Const import C_YELLOW, SCORE_POS, C_CYAN, MENU_OPTION
+from Code.Const import C_YELLOW, SCORE_POS, C_CYAN
 from Code.DBProxy import DBProxy
 
 
@@ -14,10 +14,10 @@ class Score:
         self.rect = self.surf.get_rect(topleft=(0, 0))
         self.db_proxy = DBProxy('DBScore')
 
-    def save(self, game_mode: str, player_score: list[int]):
+    def save(self, player_score:int):
         self._play_music()
         name = ''
-        score = player_score[0] if game_mode == MENU_OPTION[0] else player_score[0]
+        score = player_score
 
         while True:
             self._render_background()
