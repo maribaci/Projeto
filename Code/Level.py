@@ -55,16 +55,7 @@ class Level:
                         for ent in self.entity_list:
                             if isinstance(ent, Player) and ent.name == 'Player1':
                                 player_score[0] = ent.score
-                            return True
-
-                found_player = False
-                for ent in self.entity_list:
-                    if isinstance(ent, Player):
-                        found_player = True
-
-                if not found_player:
-                    return False
-
+                                return
 
             self.level_text(14, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', C_WHITE, (10, 5))
             self.level_text(14, f'Enemy: {len(self.entity_list)}', C_BLUE, (10, WIN_HEIGHT - 20))
