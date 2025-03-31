@@ -39,8 +39,8 @@ class Level:
             for ent in self.entity_list:
                 self.window.blit(source=ent.surf, dest=ent.rect)
                 ent.move()
-                #if ent.name == 'Player1':
-                 #   self.level_text(14, f'Score: {ent.score}', C_GREEN, (10, 25))
+                if ent.name == 'Player1':
+                    self.level_text(14, f'Score: {ent.score}', C_GREEN, (10, 25))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -48,6 +48,7 @@ class Level:
                 if event.type == EVENT_ENEMY:
                     choice = random.choice(('Enemy1', 'Enemy2'))
                     self.entity_list.append(EntityFactory.get_entity(choice))
+                    EntityMediator.enemy_spawned = True
                 if event.type == EVENT_TIMEOUT:
                     self.timeout -= TIMEOUT_STEP
                     if self.timeout <= 0:

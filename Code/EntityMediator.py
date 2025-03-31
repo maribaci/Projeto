@@ -4,6 +4,9 @@ from Code.Entity import Entity
 from Code.Player import Player
 
 class EntityMediator:
+    last_score_update = 0
+    score_interval = 3000
+    enemy_spawned = False
 
     @staticmethod
     def game_over_bg():
@@ -18,16 +21,18 @@ class EntityMediator:
         enemies = [e for e in entity_list if isinstance(e, Enemy)]
 
         for player in players:
-            collided = False
-            for enemy in enemies:
-                if player.rect.colliderect(enemy.rect):
-                    EntityMediator.show_game_over()
-                    return
-                else:
-                    collided = True
+            collided = any(
+                enemy.name in ("Enemy1", "Enemy2") and player.rect.colliderect(enemy.rect) for enemy in enemies)
 
-            if not collided:
-                player.score += 10
+            if collided:
+                EntityMediator.show_game_over()
+                return
+
+            if EntityMediator.enemy_spawned:
+                current_time = pygame.time.get_ticks()
+                if current_time - EntityMediator.last_score_update >= EntityMediator.score_interval:
+                    player.score += 10
+                    EntityMediator.last_score_update = current_time
 
     @staticmethod
     def __handle_window_collision(entity: Entity):
@@ -52,7 +57,7 @@ class EntityMediator:
             screen.blit(bg_image, (bg_x, bg_y))
 
             pygame.display.flip()
-            pygame.time.delay(5000)
+            pygame.time.delay(3000)
 
         EntityMediator.return_to_main()
 
